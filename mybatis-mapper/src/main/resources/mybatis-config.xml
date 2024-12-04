@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="jdbc.properties"/>
+    <!--配置mybatis自带的日志输出，查看原生的sql语句-->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!--配置包名后，该包下的所有类都可以直接使用，不需要再加包名了-->
+    <typeAliases>
+        <package name="com.chengkx.mapper"/>
+        <package name="com.chengkx.entity"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <!--配置事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!--配置数据源-->
+            <dataSource type="POOLED">
+                <!--配置驱动-->
+                <!--下面这些属性配置都可以放到properties文件中，用引用的方式来配置-->
+                <property name="driver" value="${driver}"/>
+                <!--配置连接数据库的url-->
+                <!--SSL连接没有设置的话，这里要设为false，否则可能会连接数据库失败-->
+                <!--注意127.0.0.1 与数据库设置一致-->
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--这是使用xml方式配置-->
+        <mapper resource="com/chengkx/mapper/PersonMapper.xml"/>
+        <mapper resource="com/chengkx/mapper/idenCardMapper.xml"/>
+
+        <mapper resource="com/chengkx/mapper/PetMapper.xml"/>
+        <mapper resource="com/chengkx/mapper/UserMapper.xml"/>
+
+        <mapper resource="com/chengkx/mapper/DeptMapper.xml"/>
+        <mapper resource="com/chengkx/mapper/EmpMapper.xml"/>
+
+        <!--<mapper resource="com/chengkx/mapper/MonsterMapper.xml"/>-->
+
+        <!--使用注解配置，不再需要mapper.xml文件，但是需要在mybatis.xml文件中注明注解文件来源-->
+        <!--<mapper class="com.chengkx.mapper.MonsterAnnotation"/>-->
+        <!--<mapper class="com/chengkx/mapper/idenCardMapper.xml"/>-->
+
+        <mapper class="com.chengkx.mapper.UserMapperAnnotation"/>
+        <mapper class="com.chengkx.mapper.PetMapperAnnotation"/>
+
+    </mappers>
+</configuration>

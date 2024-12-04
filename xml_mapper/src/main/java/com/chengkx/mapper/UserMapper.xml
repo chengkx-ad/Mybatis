@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--实现对应的接口的方法-->
+<!--namespace指定该xml文件和哪个接口对应-->
+<mapper namespace="com.chengkx.mapper.UserMapper">
+
+    <!--
+    注意：这里的value字段的内容，应该是入参对象的属性，也就是我们定义的pojo类的属性，而不是数据库字段
+    应该填useremail和username，而不是user_email user_name
+    -->
+    <insert id="addUser" parameterType="User">
+        INSERT INTO `user` (`user_email`, `user_name`)
+        VALUES (#{useremail}, #{username})
+    </insert>
+
+
+    <resultMap id="findAllUserMap" type="User">
+        <result column="user_email" property="useremail"/>
+        <result column="user_name" property="username"/>
+    </resultMap>
+    <select id="findAllUser" resultMap="findAllUserMap">
+        SELECT * FROM `user`
+    </select>
+
+
+
+</mapper>

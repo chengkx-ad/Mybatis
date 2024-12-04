@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--实现对应的接口的方法-->
+<!--namespace指定该xml文件和哪个接口对应-->
+<mapper namespace="com.chengkx.mapper.MonsterMapper">
+
+    <!--配置二级缓存
+    参数说明：缓存回收策略是FIFO，每隔60秒刷新一次，最多存放512个对象，返回的对象都是只读的
+    -->
+    <!--<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <!--
+    id 是对应接口的方法名
+    parameterType="com.chengkx.entity.monster 形参类型
+    -->
+    <!--SQL语句  最好先在sqlyog测试再拿过来-->
+    <!--这个数据库表中的各个属性要和monster类中的各个属性一致
+    看似在往数据库表中添加数据，其实只是在操作monster对象
+    -->
+    <!--增删改查-->
+    <insert id="addMonster" parameterType="com.chengkx.entity.monster" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `monster`
+        (`age`, `birthday`, `email`, `gender`, `name`, `salary`)
+        VALUES (#{age}, #{birthday}, #{email}, #{gender}, #{name}, #{salary})
+    </insert>
+    
+    <delete id="delMonster" parameterType="Integer">
+        DELETE FROM `monster`
+        WHERE id=#{id}
+    </delete>
+
+    <update id="updateMonster" parameterType="com.chengkx.entity.monster">
+        UPDATE `monster`
+        SET `age`=#{age},`birthday`=#{birthday},`email`=#{email},`gender`=#{gender},`name`=#{name},`salary`=#{salary}
+        WHERE id=#{id}
+    </update>
+
+    <!--通过id找到特定的monster，返回这个数据-->
+    <select id="getMonsterById" parameterType="Integer" resultType="monster">
+        SELECT * FROM `monster` WHERE id=#{id}
+    </select>
+
+    <select id="findAllMonster" resultType="com.chengkx.entity.monster">
+        SELECT * FROM `monster`
+    </select>
+
+</mapper>

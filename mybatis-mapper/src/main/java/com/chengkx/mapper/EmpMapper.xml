@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengkx.mapper.EmpMapper">
+
+    <resultMap id="EmpResultMap" type="Emp">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="dept" column="dept_id"
+                     select="com.chengkx.mapper.DeptMapper.getDeptById"/>
+    </resultMap>
+    <select id="getEmpsByDeptId" parameterType="Integer" resultMap="EmpResultMap">
+        SELECT * FROM emp WHERE dept_id=#{deptId}
+    </select>
+
+    <select id="getEmpById" parameterType="Integer" resultMap="EmpResultMap">
+        SELECT * FROM emp WHERE id=#{id}
+    </select>
+
+</mapper>

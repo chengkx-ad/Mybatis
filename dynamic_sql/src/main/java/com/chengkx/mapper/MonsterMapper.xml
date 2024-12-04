@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--实现对应的接口的方法-->
+<!--namespace指定该xml文件和哪个接口对应-->
+<mapper namespace="com.chengkx.mapper.MonsterMapper">
+
+    <!--if标签配置方法-->
+    <select id="findMonsterByAge" parameterType="Integer" resultType="monster">
+        SELECT * FROM `monster` WHERE 1=1
+        <if test="age >= 0">
+            AND `age` > #{age}
+        </if>
+    </select>
+
+    <!--<select id="findMonsterByIdAndName" parameterType="monster" resultType="monster">-->
+    <!--    SELECT * FROM `monster`-->
+    <!--    <where>-->
+    <!--        <if test="id >= 0">-->
+    <!--            AND id > #{id}-->
+    <!--        </if>-->
+    <!--        <if test="name != null and name != ''">-->
+    <!--            AND `name` = #{name}-->
+    <!--        </if>-->
+    <!--    </where>-->
+    <!--</select>-->
+
+
+    <select id="findMonsterByIdOrName" parameterType="map" resultType="monster">
+        SELECT * FROM `monster`
+        <choose>
+            <when test="name != null and name != ''">
+                WHERE `name`=#{name}
+            </when>
+            <when test="id > 0">
+                WHERE `id`=#{id}
+            </when>
+            <otherwise>
+                WHERE `salary`=10000
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findMonsterById" parameterType="map" resultType="monster">
+        SELECT * FROM `monster`
+        <where>
+            `id` IN
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <!--将上面注释掉的where标签，转换为trim标签-->
+    <select id="findMonsterByIdAndName" parameterType="monster" resultType="monster">
+        SELECT * FROM `monster`
+        <trim prefix="WHERE" prefixOverrides="AND|OR|CKX">
+            <if test="id >= 0">
+                CKX id > #{id}
+            </if>
+            <if test="name != null and name != ''">
+                AND `name` = #{name}
+            </if>
+        </trim>
+    </select>
+
+    <!--set标签-->
+    <update id="updateMonster" parameterType="map">
+        UPDATE `monster`
+        <set>
+            <if test="age != null and age != ''">
+                age=#{age},
+            </if>
+            <if test="birthday != null and birthday != ''">
+                birthday=#{birthday},
+            </if>
+            <if test="email != null and email != ''">
+                email=#{email},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender=#{gender},
+            </if>
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="salary != null and salary != ''">
+                salary=#{salary},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>
